@@ -440,7 +440,7 @@ impl defmt::Format for Error {
 /// The underlying kind of a [`Error`].
 #[derive(Debug)]
 #[cfg_attr(not(feature = "alloc"), derive(Clone))]
-#[cfg_attr(all(not(test), feature = "defmt"), derive(defmt::Format))]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 enum ErrorKind {
     Adhoc(AdhocError),
     Bounds(BoundsError),

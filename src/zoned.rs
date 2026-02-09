@@ -4160,6 +4160,20 @@ pub struct ZonedDifference<'a> {
     round: SpanRound<'static>,
 }
 
+#[cfg(feature = "defmt")]
+// We cannot use derive here because
+// the defmt::Format macro does not support mixed lifetimes.
+impl<'a> defmt::Format for ZonedDifference<'a> {
+    fn format(&self, fmt: defmt::Formatter) {
+        defmt::write!(
+            fmt,
+            "ZonedDifference {{ zoned: {}, round: {} }}",
+            self.zoned,
+            self.round,
+        )
+    }
+}
+
 impl<'a> ZonedDifference<'a> {
     /// Create a new default configuration for computing the span between the
     /// given zoned datetime and some other zoned datetime (specified as the

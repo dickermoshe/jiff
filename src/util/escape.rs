@@ -93,6 +93,13 @@ impl<'a> core::fmt::Debug for Bytes<'a> {
     }
 }
 
+#[cfg(feature = "defmt")]
+impl<'a> defmt::Format for Bytes<'a> {
+    fn format(&self, fmt: defmt::Formatter) {
+        defmt::write!(fmt, "\"{}\"", self.0);
+    }
+}
+
 /// A helper for repeating a single byte utilizing `Byte`.
 ///
 /// This is limited to repeating a byte up to `u8::MAX` times in order

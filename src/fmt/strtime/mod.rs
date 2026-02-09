@@ -3335,6 +3335,18 @@ impl<'f> core::fmt::Debug for Display<'f> {
     }
 }
 
+#[cfg(feature = "defmt")]
+impl<'f> defmt::Format for Display<'f> {
+    fn format(&self, fmt: defmt::Formatter) {
+        defmt::write!(
+            fmt,
+            "Display {{ fmt: {}, tm: {} }}",
+            &escape::Bytes(self.fmt),
+            self.tm,
+        )
+    }
+}
+
 /// A label to disambiguate hours on a 12-hour clock.
 ///
 /// This can be accessed on a [`BrokenDownTime`] via
