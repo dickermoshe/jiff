@@ -90,6 +90,7 @@ use crate::{
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 #[repr(u8)]
 #[allow(missing_docs)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Weekday {
     Monday = 1,
     Tuesday = 2,

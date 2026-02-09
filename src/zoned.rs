@@ -3458,6 +3458,13 @@ impl core::fmt::Display for Zoned {
     }
 }
 
+#[cfg(feature = "defmt")]
+impl defmt::Format for Zoned {
+    fn format(&self, fmt: defmt::Formatter) {
+        let _ = temporal::DateTimePrinter::new().print_zoned(self, fmt);
+    }
+}
+
 /// Parses a zoned timestamp from the Temporal datetime format.
 ///
 /// See the [`fmt::temporal`](crate::fmt::temporal) for more information on
@@ -3934,6 +3941,7 @@ impl quickcheck::Arbitrary for Zoned {
 ///
 /// This iterator is created by [`Zoned::series`].
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct ZonedSeries {
     start: Zoned,
     prev: Option<Timestamp>,
@@ -4032,6 +4040,7 @@ impl core::iter::FusedIterator for ZonedSeries {}
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct ZonedArithmetic {
     duration: Duration,
 }
@@ -4480,6 +4489,7 @@ impl<'a> From<(Unit, &'a Zoned)> for ZonedDifference<'a> {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct ZonedRound {
     round: DateTimeRound,
 }
@@ -4724,6 +4734,7 @@ impl From<(Unit, i64)> for ZonedRound {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct ZonedWith {
     original: Zoned,
     datetime_with: DateTimeWith,

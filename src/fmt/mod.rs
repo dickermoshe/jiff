@@ -451,6 +451,7 @@ impl<W: std::io::Write> Write for StdIoWrite<W> {
 /// assert_eq!(dt.to_string(), "2024-06-15T17:30:00");
 /// ```
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct StdFmtWrite<W>(pub W);
 
 impl<W: core::fmt::Write> Write for StdFmtWrite<W> {
@@ -466,5 +467,13 @@ impl<W: Write> core::fmt::Write for StdFmtWrite<W> {
     #[inline]
     fn write_str(&mut self, string: &str) -> Result<(), core::fmt::Error> {
         self.0.write_str(string).map_err(|_| core::fmt::Error)
+    }
+}
+
+#[cfg(feature = "defmt")]
+impl Write for defmt::Formatter<'_> {
+    fn write_str(&mut self, string: &str) -> Result<(), Error> {
+        defmt::write!(*self, "{}", string);
+        Ok(())
     }
 }

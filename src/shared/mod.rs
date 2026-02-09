@@ -114,6 +114,7 @@ pub type TzifTransitionsOwned = TzifTransitions<
 >;
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Tzif<STR, ABBREV, TYPES, TIMESTAMPS, STARTS, ENDS, INFOS> {
     pub fixed: TzifFixed<STR, ABBREV>,
     pub types: TYPES,
@@ -121,6 +122,7 @@ pub struct Tzif<STR, ABBREV, TYPES, TIMESTAMPS, STARTS, ENDS, INFOS> {
 }
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TzifFixed<STR, ABBREV> {
     pub name: Option<STR>,
     /// An ASCII byte corresponding to the version number. So, 0x50 is '2'.
@@ -135,6 +137,7 @@ pub struct TzifFixed<STR, ABBREV> {
 }
 
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TzifLocalTimeType {
     pub offset: i32,
     pub is_dst: bool,
@@ -201,6 +204,7 @@ pub struct TzifLocalTimeType {
 /// The times match up. All of them. The indicators don't seem to make a
 /// difference. I'm clearly missing something.
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum TzifIndicator {
     LocalWall,
     LocalStandard,
@@ -219,6 +223,7 @@ pub enum TzifIndicator {
 /// All sequences in this type are in correspondence with one another. They
 /// are all guaranteed to have the same length.
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TzifTransitions<TIMESTAMPS, STARTS, ENDS, INFOS> {
     /// The timestamp at which this transition begins.
     pub timestamps: TIMESTAMPS,
@@ -238,6 +243,7 @@ pub struct TzifTransitions<TIMESTAMPS, STARTS, ENDS, INFOS> {
 /// For example, this contains a transition's "local type index," which in
 /// turn gives access to the offset (among other metadata) for that transition.
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TzifTransitionInfo {
     /// The index into the sequence of local time type records. This is what
     /// provides the correct offset (from UTC) that is active beginning at
@@ -327,6 +333,7 @@ pub struct TzifTransitionInfo {
 /// input datetime would need to be converted to a timestamp before searching
 /// the transitions.
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum TzifTransitionKind {
     /// This transition cannot possibly lead to an unambiguous offset because
     /// its offset is equivalent to the offset of the previous transition.
@@ -436,7 +443,23 @@ impl core::fmt::Debug for TzifDateTime {
     }
 }
 
+#[cfg(feature = "defmt")]
+impl defmt::Format for TzifDateTime {
+    fn format(&self, fmt: defmt::Formatter) {
+        defmt::write!(
+            fmt,
+            "TzifDateTime {{ {:04}-{:02}-{:02}T{:02}:{:02}:{:02} }}",
+            self.year(),
+            self.month(),
+            self.day(),
+            self.hour(),
+            self.minute(),
+            self.second(),
+        );
+    }
+}
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct PosixTimeZone<ABBREV> {
     pub std_abbrev: ABBREV,
     pub std_offset: PosixOffset,
@@ -444,6 +467,7 @@ pub struct PosixTimeZone<ABBREV> {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct PosixDst<ABBREV> {
     pub abbrev: ABBREV,
     pub offset: PosixOffset,
@@ -451,18 +475,21 @@ pub struct PosixDst<ABBREV> {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct PosixRule {
     pub start: PosixDayTime,
     pub end: PosixDayTime,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct PosixDayTime {
     pub date: PosixDay,
     pub time: PosixTime,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum PosixDay {
     /// Julian day in a year, no counting for leap days.
     ///
@@ -495,11 +522,13 @@ pub enum PosixDay {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct PosixTime {
     pub second: i32,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct PosixOffset {
     pub second: i32,
 }

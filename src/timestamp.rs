@@ -2573,6 +2573,13 @@ impl core::fmt::Display for Timestamp {
     }
 }
 
+#[cfg(feature = "defmt")]
+impl defmt::Format for Timestamp {
+    fn format(&self, fmt: defmt::Formatter) {
+        let _ = temporal::DateTimePrinter::new().print_timestamp(self, fmt);
+    }
+}
+
 impl core::str::FromStr for Timestamp {
     type Err = Error;
 
@@ -2990,6 +2997,16 @@ impl core::fmt::Display for TimestampDisplayWithOffset {
             .map_err(|_| core::fmt::Error)
     }
 }
+#[cfg(feature = "defmt")]
+impl defmt::Format for TimestampDisplayWithOffset {
+    fn format(&self, fmt: defmt::Formatter) {
+        let _ = temporal::DateTimePrinter::new().print_timestamp_with_offset(
+            &self.timestamp,
+            self.offset,
+            fmt,
+        );
+    }
+}
 
 /// An iterator over periodic timestamps, created by [`Timestamp::series`].
 ///
@@ -2998,6 +3015,7 @@ impl core::fmt::Display for TimestampDisplayWithOffset {
 ///
 /// This iterator is created by [`Timestamp::series`].
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimestampSeries {
     ts: Timestamp,
     duration: Option<SignedDuration>,
@@ -3064,6 +3082,7 @@ impl core::iter::FusedIterator for TimestampSeries {}
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimestampArithmetic {
     duration: Duration,
 }
@@ -3219,6 +3238,7 @@ impl<'a> From<&'a UnsignedDuration> for TimestampArithmetic {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimestampDifference {
     timestamp: Timestamp,
     round: SpanRound<'static>,
@@ -3533,6 +3553,7 @@ impl<'a> From<(Unit, &'a Zoned)> for TimestampDifference {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimestampRound {
     smallest: Unit,
     mode: RoundMode,

@@ -1,6 +1,7 @@
 use crate::{error, util::escape::Byte, Unit};
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) enum RoundingIncrementError {
     ForDateTime,
     ForSpan,
@@ -56,6 +57,7 @@ impl core::fmt::Display for RoundingIncrementError {
 }
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) enum ParseIntError {
     NoDigitsFound,
     InvalidDigit(u8),
@@ -93,6 +95,7 @@ impl core::fmt::Display for ParseIntError {
 }
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) enum ParseFractionError {
     NoDigitsFound,
     TooManyDigits,
@@ -148,6 +151,7 @@ impl core::fmt::Display for ParseFractionError {
 }
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) struct OsStrUtf8Error {
     #[cfg(feature = "std")]
     value: alloc::boxed::Box<std::ffi::OsStr>,

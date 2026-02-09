@@ -261,6 +261,7 @@ impl<'i> ParsedTimeZone<'i> {
 
 /// A parser for Temporal datetimes.
 #[derive(Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(super) struct DateTimeParser {
     /// There are currently no configuration options for this parser.
     _priv: (),
@@ -999,6 +1000,7 @@ impl DateTimeParser {
 ///
 /// Note that in Temporal, a "span" is called a "duration."
 #[derive(Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(super) struct SpanParser {
     /// There are currently no configuration options for this parser.
     _priv: (),

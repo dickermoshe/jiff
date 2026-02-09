@@ -475,6 +475,7 @@ pub fn format(
 /// [`icu`]: https://docs.rs/icu
 /// [`jiff-icu`]: https://docs.rs/jiff-icu
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Config<C> {
     custom: C,
     lenient: bool,
@@ -744,6 +745,7 @@ pub trait Custom: Sized {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Debug, Default)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct DefaultCustom(());
 
 impl DefaultCustom {
@@ -778,6 +780,7 @@ impl Custom for DefaultCustom {}
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Debug, Default)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct PosixCustom(());
 
 impl PosixCustom {
@@ -872,6 +875,7 @@ impl Custom for PosixCustom {
 // unit. For example, only `%M` doesn't fly. If you want to parse minutes, you
 // also have to parse hours.
 #[derive(Debug, Default)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct BrokenDownTime {
     year: Option<i16>,
     month: Option<i8>,
@@ -3336,6 +3340,7 @@ impl<'f> core::fmt::Debug for Display<'f> {
 /// This can be accessed on a [`BrokenDownTime`] via
 /// [`BrokenDownTime::meridiem`].
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Meridiem {
     /// "ante meridiem" or "before midday."
     ///
@@ -3377,6 +3382,7 @@ impl From<Time> for Meridiem {
 /// for reasons of semver compatible API evolution. If you have use cases for
 /// introspecting this type, please open an issue.
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Extension {
     flag: Option<Flag>,
     width: Option<u8>,
@@ -3460,6 +3466,7 @@ impl Extension {
 
 /// The different flags one can set. They are mutually exclusive.
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 enum Flag {
     PadSpace,
     PadZero,

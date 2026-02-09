@@ -2398,6 +2398,23 @@ impl core::fmt::Debug for SignedDuration {
     }
 }
 
+#[cfg(feature = "defmt")]
+impl defmt::Format for SignedDuration {
+    fn format(&self, fmt: defmt::Formatter) {
+        if self.subsec_nanos() == 0 {
+            defmt::write!(fmt, "{}s", self.as_secs());
+        } else if self.as_secs() == 0 {
+            defmt::write!(fmt, "{}ns", self.subsec_nanos());
+        } else {
+            defmt::write!(
+                fmt,
+                "{}s {}ns",
+                self.as_secs(),
+                self.subsec_nanos().unsigned_abs()
+            );
+        }
+    }
+}
 impl TryFrom<Duration> for SignedDuration {
     type Error = Error;
 
@@ -2630,6 +2647,7 @@ impl<'de> serde_core::Deserialize<'de> for SignedDuration {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct SignedDurationRound {
     smallest: Unit,
     mode: RoundMode,

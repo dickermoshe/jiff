@@ -6,6 +6,7 @@ pub(crate) use self::enabled::*;
 #[cfg(not(test))]
 mod disabled {
     #[derive(Clone, Debug)]
+    #[cfg_attr(feature = "defmt", derive(defmt::Format))]
     pub(crate) enum Error {}
 
     impl core::fmt::Display for Error {

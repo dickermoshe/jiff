@@ -7,6 +7,7 @@ use crate::{
 
 /// An internal type for abstracting over different duration types.
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) enum Duration {
     Span(Span),
     Signed(SignedDuration),

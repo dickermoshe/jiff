@@ -79,6 +79,7 @@ const MAX_UNSIGNED_DURATION_LEN: usize = 190;
 /// assert_eq!(printer.span_to_string(&span), "1y 2months");
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[non_exhaustive]
 pub enum Designator {
     /// This writes out the full word of each unit designation. For example,
@@ -164,6 +165,7 @@ pub enum Designator {
 /// assert_eq!(printer.span_to_string(&span), "1 year 2 months");
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[non_exhaustive]
 pub enum Spacing {
     /// Does not insert any ASCII whitespace.
@@ -227,6 +229,7 @@ impl Spacing {
 /// assert_eq!(printer.duration_to_string(&duration), "-1s");
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[non_exhaustive]
 pub enum Direction {
     /// Sets the sign format based on other configuration options.
@@ -355,6 +358,7 @@ enum DirectionSign {
 /// assert_eq!(printer.duration_to_string(&duration), "1h 1m 3s");
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[non_exhaustive]
 pub enum FractionalUnit {
     /// The smallest whole integer unit allowed is hours.
@@ -494,6 +498,7 @@ impl From<FractionalUnit> for Unit {
 /// );
 /// ```
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct SpanPrinter {
     designators: &'static Designators,
     spacing: Spacing,
@@ -1621,6 +1626,7 @@ impl Default for SpanPrinter {
 /// turn permits lookups based on `Unit`, which makes writing generic code for
 /// writing designators a bit nicer and still fast.
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 struct Designators {
     singular: [&'static str; 10],
     plural: [&'static str; 10],

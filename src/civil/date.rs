@@ -2282,6 +2282,13 @@ impl core::fmt::Display for Date {
     }
 }
 
+#[cfg(feature = "defmt")]
+impl defmt::Format for Date {
+    fn format(&self, fmt: defmt::Formatter) {
+        let _ = DEFAULT_DATETIME_PRINTER.print_date(self, fmt);
+    }
+}
+
 impl core::str::FromStr for Date {
     type Err = Error;
 
@@ -2562,6 +2569,7 @@ impl quickcheck::Arbitrary for Date {
 ///
 /// This iterator is created by [`Date::series`].
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct DateSeries {
     start: Date,
     period: Span,
@@ -2612,6 +2620,7 @@ impl core::iter::FusedIterator for DateSeries {}
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct DateArithmetic {
     duration: Duration,
 }
@@ -2738,6 +2747,7 @@ impl<'a> From<&'a UnsignedDuration> for DateArithmetic {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct DateDifference {
     date: Date,
     round: SpanRound<'static>,
@@ -3124,6 +3134,7 @@ impl<'a> From<(Unit, &'a Zoned)> for DateDifference {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct DateWith {
     original: Date,
     year: Option<DateWithYear>,
@@ -3581,6 +3592,7 @@ impl DateWith {
 /// This encodes the invariant that `DateWith::year` and `DateWith::era_year`
 /// are mutually exclusive and override each other.
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 enum DateWithYear {
     Jiff(i16),
     EraYear(i16, Era),
@@ -3595,6 +3607,7 @@ enum DateWithYear {
 /// Note that when "day of year" or "day of year no leap" are used, then if a
 /// day of month is set, it is ignored.
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 enum DateWithDay {
     OfMonth(i8),
     OfYear(i16),

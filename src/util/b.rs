@@ -35,6 +35,7 @@ macro_rules! define_bounds {
         $max:expr $(,)?
     )),* $(,)?) => {
         $(
+            #[cfg_attr(feature = "defmt", derive(defmt::Format))]
             pub(crate) struct $name(());
 
             impl Bounds for $name {
@@ -73,6 +74,7 @@ macro_rules! define_bounds {
 
         /// An error that indicates a value is out of its intended range.
         #[derive(Clone, Debug)]
+        #[cfg_attr(feature = "defmt", derive(defmt::Format))]
         pub(crate) enum BoundsError {
             $($name(RawBoundsError<$name>),)*
         }
@@ -404,6 +406,7 @@ impl crate::error::IntoError for BoundsError {
     }
 }
 
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) struct RawBoundsError<B>(core::marker::PhantomData<B>);
 
 impl<B> RawBoundsError<B> {

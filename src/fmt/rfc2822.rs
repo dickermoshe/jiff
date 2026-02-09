@@ -223,6 +223,7 @@ pub fn parse(string: &str) -> Result<Zoned, Error> {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct DateTimeParser {
     relaxed_weekday: bool,
 }
@@ -969,6 +970,7 @@ impl DateTimeParser {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct DateTimePrinter {
     // The RFC 2822 printer has no configuration at present.
     _private: (),

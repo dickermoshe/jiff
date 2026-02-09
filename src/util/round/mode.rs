@@ -42,6 +42,7 @@ use crate::{
 /// ```
 #[non_exhaustive]
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum RoundMode {
     /// Rounds toward positive infinity.
     ///

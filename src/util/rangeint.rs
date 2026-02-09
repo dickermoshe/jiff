@@ -23,6 +23,7 @@ macro_rules! define_ranged {
         bigger { $($bigger_name:ident $bigger_repr:ty),* }
     ) => {
         #[derive(Clone, Copy)]
+        #[cfg_attr(feature = "defmt", derive(defmt::Format))]
         pub(crate) struct $name<const MIN: i128, const MAX: i128> {
             /// The actual value of the integer.
             ///
@@ -2195,6 +2196,7 @@ impl<const MIN: i128, const MAX: i128> ri128<MIN, MAX> {
     }
 }
 
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) struct RangedDebug<const MIN: i128, const MAX: i128> {
     rint: ri128<MIN, MAX>,
 }

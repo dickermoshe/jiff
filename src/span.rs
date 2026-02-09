@@ -708,6 +708,7 @@ pub(crate) use span_eq;
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Span {
     sign: Sign,
     units: UnitSet,
@@ -3869,6 +3870,7 @@ impl quickcheck::Arbitrary for Span {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug, Default)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[repr(transparent)]
 pub struct SpanFieldwise(pub Span);
 
@@ -4230,6 +4232,7 @@ impl_to_span!(i64);
 /// assert_eq!(Unit::Hour, Unit::Hour);
 /// ```
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Unit {
     /// A Gregorian calendar year. It usually has 365 days for non-leap years,
     /// and 366 days for leap years.
@@ -4443,6 +4446,7 @@ impl quickcheck::Arbitrary for Unit {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct SpanArithmetic<'a> {
     duration: Duration,
     relative: Option<SpanRelativeTo<'a>>,
@@ -4682,6 +4686,7 @@ impl<'a> From<(UnsignedDuration, &'a Zoned)> for SpanArithmetic<'a> {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct SpanCompare<'a> {
     span: Span,
     relative: Option<SpanRelativeTo<'a>>,
@@ -4913,6 +4918,7 @@ impl<'a, 'b> From<(&'a Span, SpanRelativeTo<'b>)> for SpanCompare<'b> {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct SpanTotal<'a> {
     unit: Unit,
     relative: Option<SpanRelativeTo<'a>>,
@@ -5104,6 +5110,7 @@ impl<'a> From<(Unit, SpanRelativeTo<'a>)> for SpanTotal<'a> {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct SpanRound<'a> {
     largest: Option<Unit>,
     smallest: Unit,
@@ -5615,6 +5622,7 @@ impl From<(Unit, i64)> for SpanRound<'static> {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct SpanRelativeTo<'a> {
     kind: SpanRelativeToKind<'a>,
 }
@@ -5838,6 +5846,7 @@ impl<'a> SpanRelativeTo<'a> {
 }
 
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 enum SpanRelativeToKind<'a> {
     Civil(DateTime),
     Zoned(&'a Zoned),
@@ -5873,6 +5882,7 @@ impl From<Date> for SpanRelativeTo<'static> {
 /// consists of non-zero units of days (and zero for all other units), then you
 /// can take a much cheaper path.
 #[derive(Clone, Copy)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) struct UnitSet(u16);
 
 impl UnitSet {

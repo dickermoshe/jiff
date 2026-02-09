@@ -68,6 +68,7 @@ pub(crate) type TzifStatic = Tzif<
 // at least 8 bytes anyway. But this *is* required for 32-bit systems, where
 // the type definition at present only has an alignment of 4 bytes.
 #[repr(align(8))]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Tzif<STR, ABBREV, TYPES, TIMESTAMPS, STARTS, ENDS, INFOS> {
     inner: shared::Tzif<STR, ABBREV, TYPES, TIMESTAMPS, STARTS, ENDS, INFOS>,
     /// The POSIX time zone for this TZif data, if present.

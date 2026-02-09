@@ -790,6 +790,18 @@ impl core::fmt::Debug for ISOWeekDate {
             .finish()
     }
 }
+#[cfg(feature = "defmt")]
+impl defmt::Format for ISOWeekDate {
+    fn format(&self, fmt: defmt::Formatter) {
+        defmt::write!(
+            fmt,
+            "ISOWeekDate {{ year: {}, week: {}, weekday: {} }}",
+            self.year_ranged().debug(),
+            self.week_ranged().debug(),
+            self.weekday
+        )
+    }
+}
 
 impl core::fmt::Display for ISOWeekDate {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {

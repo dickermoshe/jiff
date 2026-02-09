@@ -1,6 +1,6 @@
 [package]
 name = "jiff"
-version = "0.2.19"  #:version
+version = "0.2.19" #:version
 authors = ["Andrew Gallant <jamslam@gmail.com>"]
 license = "Unlicense OR MIT"
 repository = "https://github.com/BurntSushi/jiff"
@@ -177,11 +177,18 @@ js = ["dep:wasm-bindgen", "dep:js-sys"]
 # and formatting.
 perf-inline = []
 
+# Enables `defmt` support by implementing `defmt::Format` for jiff's
+# public types. This feature is intended for `core`-only environments
+# and is incompatible with `alloc` and `std` or with any other feature which
+# transitively enables them.
+defmt = ["dep:defmt"]
+
 [dependencies]
 jiff-static = { version = "0.2", path = "crates/jiff-static", optional = true }
 jiff-tzdb = { version = "0.1.5", path = "crates/jiff-tzdb", optional = true }
 log = { version = "0.4.21", optional = true, default-features = false }
 serde_core = { version = "1.0.221", optional = true, default-features = false }
+defmt = { version = "1.0.1", optional = true }
 
 # This ensures that `jiff-static` is always used with a compatible version
 # of `jiff`. Namely, since `jiff-static` emits code that relies on internal

@@ -249,6 +249,7 @@ pub(crate) static DEFAULT_SPAN_PRINTER: SpanPrinter = SpanPrinter::new();
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct DateTimeParser {
     p: parser::DateTimeParser,
     offset_conflict: OffsetConflict,
@@ -1192,6 +1193,7 @@ impl DateTimeParser {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct DateTimePrinter {
     p: printer::DateTimePrinter,
 }
@@ -2025,6 +2027,7 @@ impl DateTimePrinter {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct SpanParser {
     p: parser::SpanParser,
 }
@@ -2213,6 +2216,7 @@ impl SpanParser {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct SpanPrinter {
     p: printer::SpanPrinter,
 }

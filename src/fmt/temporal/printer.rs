@@ -117,6 +117,7 @@ const MAX_SPAN_LEN: usize = 78;
 const MAX_DURATION_LEN: usize = 35;
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(super) struct DateTimePrinter {
     lowercase: bool,
     separator: u8,
@@ -741,6 +742,7 @@ impl Default for DateTimePrinter {
 ///
 /// Note that in Temporal, a "span" is called a "duration."
 #[derive(Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(super) struct SpanPrinter {
     /// The designators to use.
     designators: &'static Designators,
@@ -945,6 +947,7 @@ impl SpanPrinter {
 }
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 struct Designators {
     // Indexed by `Unit as usize`
     map: [u8; 10],
