@@ -150,6 +150,7 @@ macro_rules! define_bounds {
 
         /// An error that indicates a value is out of its intended range.
         #[derive(Clone, Debug)]
+        #[cfg_attr(feature = "defmt", derive(defmt::Format))]
         pub(crate) enum BoundsError {
             $($name(RawBoundsError<$name>),)*
         }
@@ -686,6 +687,23 @@ where
     }
 }
 
+#[cfg(feature = "defmt")]
+impl<B, P> defmt::Format for RawBoundsError<B>
+where
+    B: Bounds<Primitive = P>,
+    P: defmt::Format,
+{
+    fn format(&self, fmt: defmt::Formatter) {
+        defmt::write!(
+            fmt,
+            "RawBoundsError {{ what: {}, min: {}, max: {} }}",
+            B::WHAT,
+            B::MIN,
+            B::MAX
+        );
+    }
+}
+
 impl<B, P> core::fmt::Display for RawBoundsError<B>
 where
     B: Bounds<Primitive = P>,
@@ -706,6 +724,7 @@ where
 ///
 /// This is useful for range errors outside of the framework above.
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) enum SpecialBoundsError {
     UnixNanoseconds,
     SignedDurationFloatOutOfRangeF32,
@@ -775,6 +794,7 @@ impl crate::error::IntoError for SpecialBoundsError {
     Clone, Copy, Debug, Default, Eq, Hash, PartialEq, PartialOrd, Ord,
 )]
 #[repr(i8)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) enum Sign {
     #[default]
     Zero = 0,

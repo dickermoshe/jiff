@@ -309,6 +309,7 @@ use crate::{
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Timestamp {
     dur: SignedDuration,
 }
@@ -2756,6 +2757,7 @@ impl quickcheck::Arbitrary for Timestamp {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimestampDisplayWithOffset {
     timestamp: Timestamp,
     offset: Offset,
@@ -2786,6 +2788,7 @@ impl core::fmt::Display for TimestampDisplayWithOffset {
 ///
 /// This iterator is created by [`Timestamp::series`].
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimestampSeries {
     ts: Timestamp,
     duration: Option<SignedDuration>,
@@ -2852,6 +2855,7 @@ impl core::iter::FusedIterator for TimestampSeries {}
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimestampArithmetic {
     duration: Duration,
 }
@@ -3007,6 +3011,7 @@ impl<'a> From<&'a UnsignedDuration> for TimestampArithmetic {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimestampDifference {
     timestamp: Timestamp,
     round: SpanRound<'static>,
@@ -3325,6 +3330,7 @@ impl<'a> From<(Unit, &'a Zoned)> for TimestampDifference {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimestampRound {
     smallest: Unit,
     mode: RoundMode,

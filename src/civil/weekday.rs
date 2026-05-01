@@ -83,6 +83,7 @@ use crate::{error::Error, shared::util::itime::IWeekday, util::b};
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 #[repr(u8)]
 #[allow(missing_docs)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Weekday {
     Monday = 1,
     Tuesday = 2,
@@ -754,6 +755,15 @@ pub struct WeekdaysForward {
     it: core::iter::Cycle<core::array::IntoIter<Weekday, 7>>,
 }
 
+#[cfg(feature = "defmt")]
+impl defmt::Format for WeekdaysForward {
+    fn format(&self, fmt: defmt::Formatter) {
+        // Avoid mirroring `Cycle`'s internal state just for defmt output. This public
+        // iterator is rarely logged directly, so the type name is sufficient.
+        defmt::write!(fmt, "WeekdaysForward");
+    }
+}
+
 impl Iterator for WeekdaysForward {
     type Item = Weekday;
 
@@ -771,6 +781,15 @@ impl core::iter::FusedIterator for WeekdaysForward {}
 #[derive(Clone, Debug)]
 pub struct WeekdaysReverse {
     it: core::iter::Cycle<core::array::IntoIter<Weekday, 7>>,
+}
+
+#[cfg(feature = "defmt")]
+impl defmt::Format for WeekdaysReverse {
+    fn format(&self, fmt: defmt::Formatter) {
+        // Avoid mirroring `Cycle`'s internal state just for defmt output. This public
+        // iterator is rarely logged directly, so the type name is sufficient.
+        defmt::write!(fmt, "WeekdaysReverse");
+    }
 }
 
 impl Iterator for WeekdaysReverse {

@@ -302,6 +302,7 @@ use crate::{
 ///
 /// See [`Zoned::round`] for more details.
 #[derive(Clone)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Zoned {
     inner: ZonedInner,
 }
@@ -369,6 +370,7 @@ pub struct Zoned {
 /// databases. So I ultimately came down on "Zoned is not Copy" as the least
 /// awful choice. *heavy sigh*
 #[derive(Clone)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 struct ZonedInner {
     timestamp: Timestamp,
     datetime: DateTime,
@@ -3937,6 +3939,7 @@ impl quickcheck::Arbitrary for Zoned {
 ///
 /// This iterator is created by [`Zoned::series`].
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct ZonedSeries {
     start: Zoned,
     prev: Option<Timestamp>,
@@ -4035,6 +4038,7 @@ impl core::iter::FusedIterator for ZonedSeries {}
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct ZonedArithmetic {
     duration: Duration,
 }
@@ -4152,6 +4156,18 @@ impl<'a> From<&'a UnsignedDuration> for ZonedArithmetic {
 pub struct ZonedDifference<'a> {
     zoned: &'a Zoned,
     round: SpanRound<'static>,
+}
+
+#[cfg(feature = "defmt")]
+impl<'a> defmt::Format for ZonedDifference<'a> {
+    fn format(&self, fmt: defmt::Formatter) {
+        defmt::write!(
+            fmt,
+            "ZonedDifference {{ zoned: {}, round: {} }}",
+            self.zoned,
+            self.round
+        );
+    }
 }
 
 impl<'a> ZonedDifference<'a> {
@@ -4483,6 +4499,7 @@ impl<'a> From<(Unit, &'a Zoned)> for ZonedDifference<'a> {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct ZonedRound {
     round: DateTimeRound,
 }
@@ -4734,6 +4751,7 @@ impl From<(Unit, i64)> for ZonedRound {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct ZonedWith {
     original: Zoned,
     datetime_with: DateTimeWith,

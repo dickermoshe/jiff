@@ -394,9 +394,32 @@ impl core::fmt::Debug for Error {
     }
 }
 
+#[cfg(feature = "defmt")]
+impl defmt::Format for Error {
+    fn format(&self, fmt: defmt::Formatter) {
+        let Some(ref inner) = self.inner else {
+            return defmt::write!(fmt, "Error {{ kind: None }}");
+        };
+        #[cfg(feature = "alloc")]
+        {
+            defmt::write!(
+                fmt,
+                "Error {{ kind: {}, cause: {} }}",
+                inner.kind,
+                inner.cause
+            );
+        }
+        #[cfg(not(feature = "alloc"))]
+        {
+            defmt::write!(fmt, "Error {{ kind: {} }}", inner.kind);
+        }
+    }
+}
+
 /// The underlying kind of a [`Error`].
 #[derive(Debug)]
 #[cfg_attr(not(feature = "alloc"), derive(Clone))]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 enum ErrorKind {
     Adhoc(AdhocError),
     Bounds(BoundsError),
@@ -512,6 +535,7 @@ impl From<ErrorKind> for Error {
 /// support the `Error::from_args` public API, which permits users of Jiff to
 /// manifest their own `Error` values from an arbitrary message.
 #[cfg_attr(not(feature = "alloc"), derive(Clone))]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 struct AdhocError {
     #[cfg(feature = "alloc")]
     message: alloc::boxed::Box<str>,
@@ -559,6 +583,7 @@ impl core::fmt::Debug for AdhocError {
 /// This enum doesn't necessarily contain every Jiff crate feature. It only
 /// contains the features whose absence can result in an error.
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) enum CrateFeatureError {
     #[cfg(not(feature = "tz-system"))]
     TzSystem,
@@ -630,6 +655,15 @@ impl core::fmt::Display for IOError {
     }
 }
 
+#[cfg(feature = "defmt")]
+impl defmt::Format for IOError {
+    fn format(&self, fmt: defmt::Formatter) {
+        // `std::io::Error` does not implement `defmt::Format`. Since this error is std-only
+        // and defmt is mainly used in embedded contexts, omitting the error is fine.
+        defmt::write!(fmt, "IOError");
+    }
+}
+
 impl core::fmt::Debug for IOError {
     fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
         #[cfg(feature = "std")]
@@ -682,6 +716,15 @@ impl core::fmt::Debug for FilePathError {
         {
             f.write_str("<BUG: SHOULD NOT EXIST>")
         }
+    }
+}
+
+#[cfg(feature = "defmt")]
+impl defmt::Format for FilePathError {
+    fn format(&self, fmt: defmt::Formatter) {
+        // `std::path::PathBuf` does not implement `defmt::Format`. Since this error is std-only
+        // and defmt is mainly used in embedded contexts, omitting the path is fine.
+        defmt::write!(fmt, "FilePathError");
     }
 }
 

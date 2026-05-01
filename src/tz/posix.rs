@@ -198,6 +198,7 @@ pub(crate) type PosixTimeZoneStatic = PosixTimeZone<&'static str>;
 // at least 8 bytes anyway. But this *is* required for 32-bit systems, where
 // the type definition at present only has an alignment of 4 bytes.
 #[repr(align(8))]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct PosixTimeZone<ABBREV> {
     inner: shared::PosixTimeZone<ABBREV>,
 }

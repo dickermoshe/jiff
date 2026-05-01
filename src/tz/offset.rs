@@ -33,6 +33,7 @@ use crate::{
 /// This type has a `From<bool>` trait implementation, where the bool is
 /// interpreted as being `true` when DST is active.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, PartialOrd, Ord)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Dst {
     /// DST is not in effect. In other words, standard time is in effect.
     No,
@@ -1132,6 +1133,21 @@ impl core::fmt::Display for Offset {
     }
 }
 
+#[cfg(feature = "defmt")]
+impl defmt::Format for Offset {
+    fn format(&self, fmt: defmt::Formatter) {
+        let sign = if self.is_negative() { "-" } else { "" };
+        defmt::write!(
+            fmt,
+            "{}{:02}:{:02}:{:02}",
+            sign,
+            self.part_hours().unsigned_abs(),
+            self.part_minutes().unsigned_abs(),
+            self.part_seconds().unsigned_abs(),
+        )
+    }
+}
+
 /// Adds a span of time to an offset. This panics on overflow.
 ///
 /// For checked arithmetic, see [`Offset::checked_add`].
@@ -1380,6 +1396,7 @@ impl TryFrom<SignedDuration> for Offset {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct OffsetArithmetic {
     duration: Duration,
 }
@@ -1482,6 +1499,7 @@ impl<'a> From<&'a UnsignedDuration> for OffsetArithmetic {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct OffsetRound {
     smallest: Unit,
     mode: RoundMode,
@@ -1712,6 +1730,7 @@ impl From<(Unit, i64)> for OffsetRound {
 /// ```
 #[derive(Clone, Copy, Debug, Default)]
 #[non_exhaustive]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum OffsetConflict {
     /// When the offset and time zone are in conflict, this will always use
     /// the offset to interpret the date time.

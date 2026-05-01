@@ -6,6 +6,7 @@ pub(crate) use self::enabled::*;
 #[cfg(not(test))]
 mod disabled {
     #[derive(Clone, Debug)]
+    #[cfg_attr(feature = "defmt", derive(defmt::Format))]
     pub(crate) enum Error {}
 
     impl core::fmt::Display for Error {
@@ -29,6 +30,7 @@ mod enabled {
     pub(crate) const MAX_LINE_LEN: usize = 2047;
 
     #[derive(Clone, Debug)]
+    #[cfg_attr(feature = "defmt", derive(defmt::Format))]
     pub(crate) enum Error {
         DuplicateLink { name: Box<str> },
         DuplicateLinkZone { name: Box<str> },

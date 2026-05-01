@@ -72,6 +72,7 @@ use crate::{
 /// ```
 #[derive(Clone, Copy, Debug, Default)]
 #[non_exhaustive]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Disambiguation {
     /// In a backward transition, the earlier time is selected. In forward
     /// transition, the later time is selected.
@@ -150,6 +151,7 @@ pub enum Disambiguation {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum AmbiguousOffset {
     /// The offset for a particular civil datetime and time zone is
     /// unambiguous.
@@ -295,6 +297,7 @@ impl AmbiguousOffset {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct AmbiguousTimestamp {
     dt: DateTime,
     offset: AmbiguousOffset,
@@ -810,6 +813,7 @@ impl AmbiguousTimestamp {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct AmbiguousZoned {
     ts: AmbiguousTimestamp,
     tz: TimeZone,

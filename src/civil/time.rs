@@ -212,6 +212,7 @@ use crate::{
 ///
 /// See [`Time::round`] for more details.
 #[derive(Clone, Copy, Eq, Hash, PartialEq, PartialOrd, Ord)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Time {
     hour: i8,
     minute: i8,
@@ -2141,6 +2142,7 @@ impl quickcheck::Arbitrary for Time {
 ///
 /// This iterator is created by [`Time::series`].
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimeSeries {
     start: Time,
     period: Span,
@@ -2191,6 +2193,7 @@ impl core::iter::FusedIterator for TimeSeries {}
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimeArithmetic {
     duration: Duration,
 }
@@ -2349,6 +2352,7 @@ impl<'a> From<&'a UnsignedDuration> for TimeArithmetic {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimeDifference {
     time: Time,
     round: SpanRound<'static>,
@@ -2671,6 +2675,7 @@ impl<'a> From<(Unit, &'a Zoned)> for TimeDifference {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimeRound {
     smallest: Unit,
     mode: RoundMode,
@@ -2854,6 +2859,7 @@ impl From<(Unit, i64)> for TimeRound {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimeWith {
     original: Time,
     hour: Option<i8>,

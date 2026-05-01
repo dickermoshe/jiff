@@ -23,6 +23,7 @@ types. For example, `Date` versus `IDate`.
 */
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, PartialOrd, Ord)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) struct ITimestamp {
     pub(crate) second: i64,
     pub(crate) nanosecond: i32,
@@ -81,6 +82,7 @@ impl ITimestamp {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, PartialOrd, Ord)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) struct IOffset {
     pub(crate) second: i32,
 }
@@ -90,6 +92,7 @@ impl IOffset {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, PartialOrd, Ord)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) struct IDateTime {
     pub(crate) date: IDate,
     pub(crate) time: ITime,
@@ -167,6 +170,7 @@ impl IDateTime {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, PartialOrd, Ord)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) struct IEpochDay {
     pub(crate) epoch_day: i32,
 }
@@ -246,6 +250,7 @@ impl IEpochDay {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, PartialOrd, Ord)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) struct IDate {
     pub(crate) year: i16,
     pub(crate) month: i8,
@@ -503,6 +508,7 @@ impl IDate {
 /// This uses units of hours, minutes, seconds and fractional seconds (to
 /// nanosecond precision).
 #[derive(Clone, Copy, Debug, Eq, PartialEq, PartialOrd, Ord)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) struct ITime {
     pub(crate) hour: i8,
     pub(crate) minute: i8,
@@ -544,6 +550,7 @@ impl ITime {
 
 /// Represents a single point in the day, to second precision.
 #[derive(Clone, Copy, Debug, Eq, PartialEq, PartialOrd, Ord)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) struct ITimeSecond {
     pub(crate) second: i32,
 }
@@ -567,6 +574,7 @@ impl ITimeSecond {
 
 /// Represents a single point in the day, to nanosecond precision.
 #[derive(Clone, Copy, Debug, Eq, PartialEq, PartialOrd, Ord)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) struct ITimeNanosecond {
     pub(crate) nanosecond: i64,
 }
@@ -595,6 +603,7 @@ impl ITimeNanosecond {
 
 /// Represents a weekday.
 #[derive(Clone, Copy, Debug, Eq, PartialEq, PartialOrd, Ord)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) struct IWeekday {
     /// Range is `1..=6` with `1=Monday`.
     offset: i8,
@@ -672,6 +681,7 @@ impl IWeekday {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) enum IAmbiguousOffset {
     Unambiguous { offset: IOffset },
     Gap { before: IOffset, after: IOffset },
@@ -679,6 +689,7 @@ pub(crate) enum IAmbiguousOffset {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub(crate) enum RangeError {
     DateInvalidDayOfYear { year: i16 },
     DateInvalidDayOfYearNoLeap,

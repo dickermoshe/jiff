@@ -213,6 +213,7 @@ use crate::{
 ///
 /// See [`DateTime::round`] for more details.
 #[derive(Clone, Copy, Eq, Hash, PartialEq, PartialOrd, Ord)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct DateTime {
     date: Date,
     time: Time,
@@ -2838,6 +2839,7 @@ impl quickcheck::Arbitrary for DateTime {
 ///
 /// This iterator is created by [`DateTime::series`].
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct DateTimeSeries {
     start: DateTime,
     period: Span,
@@ -2897,6 +2899,7 @@ impl core::iter::FusedIterator for DateTimeSeries {}
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct DateTimeArithmetic {
     duration: Duration,
 }
@@ -3017,6 +3020,7 @@ impl<'a> From<&'a UnsignedDuration> for DateTimeArithmetic {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct DateTimeDifference {
     datetime: DateTime,
     round: SpanRound<'static>,
@@ -3388,6 +3392,7 @@ impl<'a> From<(Unit, &'a Zoned)> for DateTimeDifference {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct DateTimeRound {
     smallest: Unit,
     mode: RoundMode,
@@ -3625,6 +3630,7 @@ impl From<(Unit, i64)> for DateTimeRound {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct DateTimeWith {
     date_with: DateWith,
     time_with: TimeWith,

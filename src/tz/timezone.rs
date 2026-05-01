@@ -248,6 +248,7 @@ use self::repr::Repr;
 /// [RFC 8536]: https://datatracker.ietf.org/doc/html/rfc8536
 /// [`with` attribute]: https://serde.rs/field-attrs.html#with
 #[derive(Clone, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimeZone {
     repr: Repr,
 }
@@ -1503,6 +1504,7 @@ impl core::fmt::Debug for TimeZone {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimeZoneTransition<'t> {
     // We don't currently do anything smart to make iterating over
     // transitions faster. We could if we pushed the iterator impl down into
@@ -1692,6 +1694,7 @@ impl<'t> TimeZoneTransition<'t> {
 /// [`icu`]: https://docs.rs/icu
 /// [`jiff-icu`]: https://docs.rs/jiff-icu
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimeZoneOffsetInfo<'t> {
     pub(crate) offset: Offset,
     pub(crate) dst: Dst,
@@ -1819,6 +1822,7 @@ impl<'t> TimeZoneOffsetInfo<'t> {
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimeZonePrecedingTransitions<'t> {
     tz: &'t TimeZone,
     cur: Timestamp,
@@ -1870,6 +1874,7 @@ impl<'t> core::iter::FusedIterator for TimeZonePrecedingTransitions<'t> {}
 /// # Ok::<(), Box<dyn std::error::Error>>(())
 /// ```
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct TimeZoneFollowingTransitions<'t> {
     tz: &'t TimeZone,
     cur: Timestamp,
@@ -2302,6 +2307,31 @@ mod repr {
                     f.write_str("Posix(")?;
                     core::fmt::Display::fmt(&posix, f)?;
                     f.write_str(")")
+                },
+            }
+        }
+    }
+
+    #[cfg(feature = "defmt")]
+    impl defmt::Format for Repr {
+        fn format(&self, fmt: defmt::Formatter) {
+            each! {
+                self,
+                UTC => defmt::write!(fmt, "UTC"),
+                UNKNOWN => defmt::write!(fmt, "Etc/Unknown"),
+                FIXED(offset) => defmt::write!(fmt, "Fixed({})", offset),
+                STATIC_TZIF(tzif) => {
+                    // The full debug output is a bit much, so constrain it.
+                    let field = tzif.name().unwrap_or("Local");
+                    defmt::write!(fmt, "TZif({})", field)
+                },
+                ARC_TZIF(tzif) => {
+                    // The full debug output is a bit much, so constrain it.
+                    let field = tzif.name().unwrap_or("Local");
+                    defmt::write!(fmt, "TZif({})", field)
+                },
+                ARC_POSIX(posix) => {
+                    defmt::write!(fmt, "Posix({})", posix)
                 },
             }
         }
