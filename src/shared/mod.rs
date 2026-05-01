@@ -69,6 +69,9 @@ done:
 * A header is added to indicate that the copied file is auto-generated.
 * All `#[cfg(feature = "alloc")]` annotations are removed. The `jiff-static`
   proc macro always runs in a context where the standard library is available.
+* All `#[cfg(feature = "defmt")]` annotations and gated items are removed. The
+  `jiff-static` proc macro only needs these types internally for parsing and
+  code generation.
 * Any code between `// only-jiff-start` and `// only-jiff-end` comments is
   removed. Nesting isn't supported.
 
