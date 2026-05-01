@@ -25,3 +25,13 @@ for f in "${features[@]}"; do
     cargo test --lib --no-default-features --features "$f"
     cargo test --test integration --no-default-features --features "$f"
 done
+
+defmt_features=(
+    "defmt"
+    "alloc defmt"
+    "std defmt"
+)
+for f in "${defmt_features[@]}"; do
+    echo "===== CHECK FEATURES: '$f' ====="
+    cargo check --no-default-features --features "$f"
+done
