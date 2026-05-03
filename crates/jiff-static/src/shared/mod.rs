@@ -73,7 +73,7 @@ done:
   proc macro always runs in a context where the standard library is available.
 * All `#[cfg(feature = "defmt")]` annotations and gated items are removed. The
   `jiff-static` proc macro only needs these types internally for parsing and
-  code generation and never formats them with defmt.
+  code generation.
 * Any code between `// only-jiff-start` and `// only-jiff-end` comments is
   removed. Nesting isn't supported.
 
