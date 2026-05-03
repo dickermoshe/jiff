@@ -1,6 +1,6 @@
 [package]
 name = "jiff"
-version = "0.2.24"  #:version
+version = "0.2.24" #:version
 authors = ["Andrew Gallant <jamslam@gmail.com>"]
 license = "Unlicense OR MIT"
 repository = "https://github.com/BurntSushi/jiff"
@@ -177,6 +177,8 @@ js = ["dep:wasm-bindgen", "dep:js-sys"]
 # and formatting.
 perf-inline = []
 
+# Enables support for formatting Jiff types with `defmt`, a compact logging
+# framework commonly used in embedded Rust.
 defmt = ["dep:defmt"]
 
 [dependencies]

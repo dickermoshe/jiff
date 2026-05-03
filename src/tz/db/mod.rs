@@ -583,7 +583,7 @@ impl defmt::Format for TimeZoneDatabase {
     fn format(&self, fmt: defmt::Formatter) {
         // `Kind` doesn't implement `defmt::Format`, so we only emit the type name.
         // On embedded targets the database is usually bundled or unused, so the
-        // internal backend isn't meaningful to log.
+        // internal backend isn't meaningful to log either way.
         defmt::write!(fmt, "TimeZoneDatabase");
     }
 }

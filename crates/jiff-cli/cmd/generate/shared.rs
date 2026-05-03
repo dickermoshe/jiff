@@ -112,7 +112,7 @@ fn remove_only_jiffs(code: &str) -> String {
 /// (and `std`) are enabled.
 fn remove_cfg_alloc_or_std(code: &str) -> String {
     static RE: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r###"#\[cfg\(feature = "(alloc|std)"\)\]\r?\n"###).unwrap()
+        Regex::new(r###"#\[cfg\(feature = "(alloc|std)"\)\]\n"###).unwrap()
     });
     RE.replace_all(code, "").into_owned()
 }
@@ -124,13 +124,13 @@ fn remove_cfg_alloc_or_std(code: &str) -> String {
 fn remove_defmt(code: &str) -> String {
     static CFG_ATTR_RE: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r###"#\[cfg_attr\(feature = "defmt", derive\(defmt::Format\)\)\]\r?\n"###,
+            r###"#\[cfg_attr\(feature = "defmt", derive\(defmt::Format\)\)\]\n"###,
         )
         .unwrap()
     });
     static CFG_ITEM_RE: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r###"(?ms)^#\[cfg\(feature = "defmt"\)\]\r?\n^[^\r\n]*\{\r?\n.*?^}\r?\n"###,
+            r###"(?ms)^#\[cfg\(feature = "defmt"\)\]\r?\n^[^\r\n]*\{\r?\n.*?^}\n"###,
         )
         .unwrap()
     });

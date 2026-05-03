@@ -758,7 +758,7 @@ pub struct WeekdaysForward {
 #[cfg(feature = "defmt")]
 impl defmt::Format for WeekdaysForward {
     fn format(&self, fmt: defmt::Formatter) {
-        // Avoid mirroring `Cycle`'s internal state just for defmt output. This public
+        // Avoid mirroring `Cycle`'s internal state for defmt output. This public
         // iterator is rarely logged directly, so the type name is sufficient.
         defmt::write!(fmt, "WeekdaysForward");
     }
