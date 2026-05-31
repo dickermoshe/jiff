@@ -71,6 +71,9 @@ done:
   proc macro always runs in a context where the standard library is available.
 * Any code between `// only-jiff-start` and `// only-jiff-end` comments is
   removed. Nesting isn't supported.
+* All `#[cfg(feature = "defmt")]` annotations and gated items are removed. The
+  `jiff-static` proc macro only needs these types internally for parsing and
+  code generation.
 
 Otherwise, this module is specifically organized in a way that doesn't rely on
 any other part of Jiff. The one exception are routines to convert from these
@@ -437,6 +440,7 @@ impl core::fmt::Debug for TzifDateTime {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct PosixTimeZone<ABBREV> {
     pub std_abbrev: ABBREV,
     pub std_offset: PosixOffset,
@@ -444,6 +448,7 @@ pub struct PosixTimeZone<ABBREV> {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct PosixDst<ABBREV> {
     pub abbrev: ABBREV,
     pub offset: PosixOffset,
@@ -451,18 +456,21 @@ pub struct PosixDst<ABBREV> {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct PosixRule {
     pub start: PosixDayTime,
     pub end: PosixDayTime,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct PosixDayTime {
     pub date: PosixDay,
     pub time: PosixTime,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum PosixDay {
     /// Julian day in a year, no counting for leap days.
     ///
@@ -495,11 +503,13 @@ pub enum PosixDay {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct PosixTime {
     pub second: i32,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct PosixOffset {
     pub second: i32,
 }
